@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import {
-   StyleSheet, View, Text, Image
+   StyleSheet, View, Text, Image,TouchableHighlight, AppRegistry
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Hoshi  } from 'react-native-textinput-effects';
 import Button from 'react-native-button';
 import Footer from '../footer/Footer';
+import DropdownAlert from 'react-native-dropdownalert'
 
+GLOBAL = require('../Globals');
+
+const hasError = false;
 
 export default class Login extends Component {
+
+ constructor(props) {
+   super(props);
+   this.state = {hasError: false, email: this.email, password: this.password};
+ }
+
   render() {
     return (
       <View style={{flex: 1}}>
@@ -17,12 +27,14 @@ export default class Login extends Component {
                   <Image source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}} style={{width: 250, height: 100}}/>
               </View>
               <View style={{flex: 2, paddingVertical: 16}}>
-                  <Hoshi style={styles.input} label={'Email'} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }} />
-                  <Hoshi style={styles.input} label={'Password'} secureTextEntry={true} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }}/>
+                  <Hoshi style={styles.input} label={'Email'}
+                  onChangeText={(text) => this.email = text} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }} />
+                  <Hoshi style={styles.input} label={'Password'}
+                  onChangeText={(text) => this.password = text} secureTextEntry={true} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }}/>
                   <View style={{padding: 10, width: 250}}>
                       <Button
                       containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'darkturquoise'}}
-                      style={{fontSize: 20, color: 'white'}} onPress={onLoginButtonPress}>
+                      style={{fontSize: 20, color: 'white'}} onPress={() => this.onLoginButtonPress()}>
                         Entrar
                       </Button>
                   </View>
@@ -38,16 +50,43 @@ export default class Login extends Component {
          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'paleturquoise'}} >
             <Text  style={styles.textFooter}> © 2016 Produced for the class Projeto de Software I</Text>
          </View>
+         <DropdownAlert
+                 ref={(ref) => this.dropdown = ref}  closeInterval={4000}  showCancel={false} />
       </View>
     );
   }
+
+
+  onLoginButtonPress(){
+    this.setState({hasError: false});
+    fetch(GLOBAL.BASE_URL + '/api/security/logon',
+        { method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'user': this.email,
+            'password': this.password
+          }
+        })
+      .then(function(response) {
+        if (response.status == 200) {
+          Actions.home({});
+        }else {
+          hasError = true;
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+
+    if (hasError) {
+      this.dropdown.alertWithType('error', 'Login não autorizado', 'Email ou senha inválidos!')
+    }
+  }
+
+    closeAlert() {
+      this.dropdown.onClose()
+    }
 }
-
-
-
-const onLoginButtonPress = () => {
-  Actions.home({});
-};
 
 const onRegisterButtonPress = () => {
   Actions.register({});

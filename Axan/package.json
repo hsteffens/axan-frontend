@@ -13,6 +13,7 @@
     "react-native": "^0.36.0-rc.1",
     "react-native-button": "^1.7.1",
     "react-native-drawer": "^2.3.0",
+    "react-native-dropdownalert": "^2.5.0",
     "react-native-icons": "^0.7.1",
     "react-native-maps": "^0.12.2",
     "react-native-material-design-searchbar": "^1.0.11",
