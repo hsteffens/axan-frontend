@@ -25,7 +25,7 @@ export default class Login extends Component {
       <View style={{flex: 1}}>
          <View style={{flex: 9,justifyContent: 'space-between', backgroundColor: 'slateblue', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                  <Image source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}} style={{width: 250, height: 100}}/>
+                  <Image source={{uri: 'https://raw.githubusercontent.com/JoaoPauloZ/axan-backend/master/axan%20logo.PNG'}} style={{width: 250, height: 100}}/>
               </View>
               <View style={{flex: 2, paddingVertical: 16}}>
                   <Hoshi style={styles.input} label={'Email'}

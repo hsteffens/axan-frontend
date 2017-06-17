@@ -25,12 +25,14 @@ export default class ProductOwner extends Component {
       modalVisible: false,
       selectedValue : null,
       refreshing: false,
+      valueShoppingList: '0,00',
       dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2, }), loaded: false,
     };
   }
 
   componentDidMount() {
       this.loadData();
+      this.loadValueShoppingList();
   }
 
    loadData() {
@@ -89,6 +91,7 @@ export default class ProductOwner extends Component {
           this.dropdown.alertWithType('error', 'Item não removido', 'Ocorreu um erro inesperado')
         }else{
           this.loadData();
+          this.loadValueShoppingList();
           this.dropdown.onClose();
         }
   }
@@ -108,6 +111,22 @@ export default class ProductOwner extends Component {
 
 _setModalVisible = (visible) => { this.setState({modalVisible: visible}); };
 
+  loadValueShoppingList() {
+   var URL = GLOBAL.BASE_URL + '/api/user/shopping-list/price';
+
+    fetch(URL,
+        { method: 'GET',
+          headers: {
+             'token': GLOBAL.TOKEN
+          }
+        })
+        .then((response) =>
+              response.json()) .then((responseData) => {
+                 this.setState({ valueShoppingList: responseData.result[0].price});
+
+              }) .done();
+   }
+
   render() {
     var activeButtonStyle = { backgroundColor: '#ddd' };
     return (
@@ -126,7 +145,7 @@ _setModalVisible = (visible) => { this.setState({modalVisible: visible}); };
         </Modal>
 
         <View style={{flex: 2, padding:20, justifyContent: 'space-between'}}>
-            <Text style={styles.title}>R$ 138,2O</Text>
+            <Text style={styles.title}>R$ {this.state.valueShoppingList}</Text>
             <Button
               containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: '#6a5acd'}}
               style={{fontSize: 18, color: 'white'}} onPress={onMapButtonPress} >
