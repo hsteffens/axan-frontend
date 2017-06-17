@@ -1,35 +1,147 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ListView, Image,TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, View, Text, ListView, Image,TouchableWithoutFeedback, Modal, RefreshControl} from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Button from 'react-native-button';
 import SearchBar from 'react-native-material-design-searchbar';
+import DropdownAlert from 'react-native-dropdownalert';
+import { Hoshi  } from 'react-native-textinput-effects';
+
+GLOBAL = require('../Globals');
+const hasError = false;
 
 export default class Feed extends Component {
+
   constructor(props) {
-    super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      dataSource: ds.cloneWithRows([
-        {name:'Batata',price:'12.00', picture:'https://maxcdn.icons8.com/Share/icon/Plants//potato1600.png'},
-        {name:'Arroz',price:'8.00', picture:'https://cdn1.iconfinder.com/data/icons/cooking-and-food/510/01-Rice-512.png'},
-        {name:'Feijão',price:'13.50', picture:'https://cdn0.iconfinder.com/data/icons/different-types-of-legumes/32/kidney-beans-512.png'},
-        {name:'Maça',price:'5.80', picture:'https://cdn1.iconfinder.com/data/icons/food-drink-5/32/apple-512.png'},
-        {name:'Banana',price:'3.86', picture:'http://www.clker.com/cliparts/f/1/d/9/13683029131592382225bananas-icon-md.png'},
-        {name:'Picanha',price:'38.00', picture:'https://cdn2.iconfinder.com/data/icons/food-icons-6/200/food_pork_thig-512.png'},
-        {name:'Macarrão',price:'3.20', picture:'https://cdn3.iconfinder.com/data/icons/food-from-around-the-world/512/pasta-512.png'},
-        {name:'Ovos',price:'4.50', picture:'https://d30y9cdsu7xlg0.cloudfront.net/png/20088-200.png'}
-      ])
-    };
+     super(props);
+
+     this._onPressRow = this._onPressRow.bind(this)
+     this._setModalVisible = this._setModalVisible.bind(this)
+     this.fetchData = this.fetchData.bind(this)
+     this.closeModal = this.closeModal.bind(this)
+     this._onRefresh = this._onRefresh.bind(this)
+     this._onSearchChange = this._onSearchChange.bind(this)
+
+     this.state = {
+       transparent: false,
+       modalVisible: false,
+       selectedValue : undefined,
+       quant: this.quant,
+       refreshing: false,
+       dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2, }), loaded: false,
+       search: this.search};
   }
 
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
+    var URL = GLOBAL.BASE_URL + '/api/product/search';
+    if (this.state.search != undefined) {
+      URL = URL + '?q=' + this.state.search;
+    }
+    fetch(URL,
+        { method: 'GET',
+          headers: {
+             'token': GLOBAL.TOKEN
+          }
+        })
+        .then((response) =>
+               response.json()) .then((responseData) => {
+                 this.setState({
+                   dataSource: this.state.dataSource.cloneWithRows(responseData.result), loaded: true, });
+                 }) .done();
+   }
+
+   _onPressRow(rowID, rowData) {
+
+     rowData.isSelect = !rowData.isSelect;
+     this.setState({
+        modalVisible: true,
+        selectedValue: rowID.id
+      });
+
+   }
+
+   closeModal() {
+     this._setModalVisible.bind(this, false)
+     this.setState({
+        modalVisible: false,
+        selectedValue: undefined
+      });
+    }
+
+   fetchData() {
+     this.setState({
+        modalVisible: false
+      });
+
+     var URL = GLOBAL.BASE_URL + '/api/user/shopping-list/product/' + this.state.selectedValue + '/quantity/'+this.state.quant;
+
+     fetch(URL,
+          { method: 'POST',
+           headers: {
+              'token': GLOBAL.TOKEN,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+           }
+         }).then(function(response) {
+            if (response.status == 200) {
+              this.setState({
+                 modalVisible: false,
+                 selectedValue: null
+               });
+            }else {
+               hasError = true;
+            }
+          }).catch((error) => {
+             console.error(error);
+          });
+
+          if (hasError) {
+            this.dropdown.alertWithType('error', 'Item não adicionado', 'Ocorreu um erro inesperado')
+          }else{
+            this.dropdown.onClose();
+          }
+    }
+
+   _setModalVisible = (visible) => { this.setState({modalVisible: visible}); };
+
+    _onRefresh() {
+      this.setState({refreshing: true});
+      this.loadData().then(() => { this.setState({refreshing: false}); });
+    }
+
+    _onSearchChange(text) {
+      this.setState({search: text});
+      this.loadData();
+    }
+
   render() {
+    var activeButtonStyle = { backgroundColor: '#ddd' };
     return (
       <View style={{flex: 1, backgroundColor: 'darkslateblue'}}>
+
+          <Modal
+               animationType={"slide"} transparent={true} visible={this.state.modalVisible}
+               onRequestClose={() => this._setModalVisible(false)}>
+                 <View style={[styles.container]}>
+                   <View style={[styles.innerContainer]}>
+                     <Text>"Adicionar Produto Selecionado"</Text>
+                     <Hoshi style={styles.input} label={'Quantidade do produto'}
+                     onChangeText={(text) => this.quant = text}
+                     borderColor={'black'} labelStyle={{ color: 'black', fontSize : 20 }} inputStyle={{ color: 'white' }}/>
+
+                     <Button onPress={this.fetchData.bind()} style={styles.modalButton}> Confirmar </Button>
+                     <Button onPress={this.closeModal.bind()} style={styles.modalButton}> Cancelar </Button>
+                   </View>
+                 </View>
+         </Modal>
+
         <View style={{flex: 1, padding:20}}>
           <SearchBar
-            onSearchChange={() => console.log('On Search')}
+            onSearchChange={(text) => this._onSearchChange(text)}
             height={50}
-            onFocus={() => console.log('On Focus')}
-            onBlur={() => console.log('On Blur')}
             placeholder={'Search...'}
             autoCorrect={false}
             padding={5}
@@ -38,11 +150,12 @@ export default class Feed extends Component {
         </View>
         <View style={{flex: 6}}>
             <ListView
-                  dataSource={this.state.dataSource}
+                  dataSource={this.state.dataSource} enableEmptySections={true}
+                  refreshControl={ <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} /> }
                   renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
                   renderRow={(rowData) =>
                     <View style={{height:100, padding:10, backgroundColor: 'mediumslateblue'}}>
-                      <TouchableWithoutFeedback>
+                      <TouchableWithoutFeedback onPress={this._onPressRow.bind(this.rowID, rowData)}>
                         <View style={{flex: 1}}>
                           <View style={{flex: 1, flexDirection: 'row'}}>
                             <View>
@@ -61,12 +174,38 @@ export default class Feed extends Component {
                   }
                 />
         </View>
+        <DropdownAlert
+                ref={(ref) => this.dropdown = ref}  closeInterval={4000}  showCancel={false} />
       </View>
     )
+  }
+  closeAlert() {
+    this.dropdown.onClose()
   }
 }
 
 const styles = StyleSheet.create({
+  input:{
+    marginTop: 4,
+    minWidth: 250
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  innerContainer: {
+    borderRadius: 10,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 20,
+    width: 300,
+    height: 300
+  },
+  modalButton: { marginTop: 10, },
   separator: {
     flex: 2,
     height: StyleSheet.hairlineWidth,

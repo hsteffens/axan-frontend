@@ -4,21 +4,22 @@ import { Actions } from 'react-native-router-flux';
 import SearchBar from 'react-native-material-design-searchbar';
 
 export default class Feed extends Component {
+
+  async function getData() {
+    try {
+        let response = await fetch(GLOBAL.BASE_URL + '/product/search/');
+        return response.json(); // this call is not async
+    } catch(error) {
+        console.error(error);
+    }
+  }
+
   constructor(props) {
     super(props);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       selectProduct: {},
-      dataSource: ds.cloneWithRows([
-        {name:'Batata',price:'12.00', picture:'https://maxcdn.icons8.com/Share/icon/Plants//potato1600.png'},
-        {name:'Arroz',price:'8.00', picture:'https://cdn1.iconfinder.com/data/icons/cooking-and-food/510/01-Rice-512.png'},
-        {name:'Feijão',price:'13.50', picture:'https://cdn0.iconfinder.com/data/icons/different-types-of-legumes/32/kidney-beans-512.png'},
-        {name:'Maça',price:'5.80', picture:'https://cdn1.iconfinder.com/data/icons/food-drink-5/32/apple-512.png'},
-        {name:'Banana',price:'3.86', picture:'http://www.clker.com/cliparts/f/1/d/9/13683029131592382225bananas-icon-md.png'},
-        {name:'Picanha',price:'38.00', picture:'https://cdn2.iconfinder.com/data/icons/food-icons-6/200/food_pork_thig-512.png'},
-        {name:'Macarrão',price:'3.20', picture:'https://cdn3.iconfinder.com/data/icons/food-from-around-the-world/512/pasta-512.png'},
-        {name:'Ovos',price:'4.50', picture:'https://d30y9cdsu7xlg0.cloudfront.net/png/20088-200.png'}
-      ])
+      dataSource: ds.cloneWithRows(getData())
     };
   }
 

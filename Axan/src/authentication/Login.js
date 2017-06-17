@@ -6,11 +6,12 @@ import { Actions } from 'react-native-router-flux';
 import { Hoshi  } from 'react-native-textinput-effects';
 import Button from 'react-native-button';
 import Footer from '../footer/Footer';
-import DropdownAlert from 'react-native-dropdownalert'
+import DropdownAlert from 'react-native-dropdownalert';
 
 GLOBAL = require('../Globals');
 
 const hasError = false;
+const msg = 'undefined';
 
 export default class Login extends Component {
 
@@ -58,29 +59,35 @@ export default class Login extends Component {
 
 
   onLoginButtonPress(){
-    this.setState({hasError: false});
+  this.setState({hasError: false});
+
+    msg = 'json.message';
+
     fetch(GLOBAL.BASE_URL + '/api/security/logon',
         { method: 'POST',
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'contentType': 'application/json; charset=utf-8',
             'user': this.email,
             'password': this.password
           }
         })
-      .then(function(response) {
-        if (response.status == 200) {
-          Actions.home({});
-        }else {
-          hasError = true;
-        }
-      }).catch((error) => {
-        console.error(error);
-      });
+      .then((response) =>
+          response.json()) .then((responseData) => {
+              var data = JSON.stringify(responseData);
+              var json =  JSON.parse(data);
+              if (responseData.status == 'SUCESS') {
+                  GLOBAL.TOKEN = json.result[0].token;
+                  Actions.home({});
+              }else{
+                  hasError = true;
+              }
+          }) .done();
 
-    if (hasError) {
-      this.dropdown.alertWithType('error', 'Login não autorizado', 'Email ou senha inválidos!')
-    }
+      if (hasError) {
+        this.dropdown.alertWithType('error', 'Login não autorizado', 'Email ou senha inválidos!')
+      }else{
+        this.dropdown.onClose();
+      }
   }
 
     closeAlert() {

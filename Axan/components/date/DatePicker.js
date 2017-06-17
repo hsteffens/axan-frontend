@@ -4,12 +4,12 @@ import { Hoshi  } from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class DatePicker extends Component {
-  state = {
-    presetDate: new Date(2020, 4, 5),
-    allDate: new Date(2020, 4, 5),
-    simpleText: 'pick a date',
-    datePicker: '',
-  };
+
+    constructor(props) {
+      super(props);
+      this.state = {presetDate: new Date(2020, 4, 5), allDate: new Date(2020, 4, 5), simpleText: 'pick a date'};
+
+    }
 
     showPicker = async (stateKey, options) => {
       try {
@@ -22,7 +22,7 @@ export default class DatePicker extends Component {
           newState[stateKey + 'Text'] = date.toLocaleDateString();
           newState[stateKey + 'Date'] = date;
 
-          this.state.datePicker = date.toLocaleDateString();
+          this.props.datePicker = date.toLocaleDateString();
         }
         this.setState(newState);
       } catch ({code, message}) {
@@ -38,7 +38,7 @@ export default class DatePicker extends Component {
                   label={this.props.label} borderColor={'white'}
                   labelStyle={{ color: 'white', fontSize : 20 }}
                   inputStyle={{ color: 'white' }}
-                  value={this.state.datePicker}
+                  value={this.props.datePicker}
                   onChangeText={(event) => this.setState(date:event.nativeEvent.text)}
               />
           </View>
