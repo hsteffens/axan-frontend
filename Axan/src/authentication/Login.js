@@ -23,25 +23,25 @@ export default class Login extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-         <View style={{flex: 9,justifyContent: 'space-between', backgroundColor: 'slateblue', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+         <View style={{flex: 9,justifyContent: 'space-between', backgroundColor: 'white', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <Image source={{uri: 'https://raw.githubusercontent.com/JoaoPauloZ/axan-backend/master/axan%20logo.PNG'}} style={{width: 250, height: 100}}/>
               </View>
               <View style={{flex: 2, paddingVertical: 16}}>
                   <Hoshi style={styles.input} label={'Email'}
-                  onChangeText={(text) => this.email = text} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }} />
+                  onChangeText={(text) => this.email = text} borderColor={'darkturquoise'} labelStyle={{ color: 'darkturquoise', fontSize : 20 }} inputStyle={{ color: 'darkturquoise' }} />
                   <Hoshi style={styles.input} label={'Password'}
-                  onChangeText={(text) => this.password = text} secureTextEntry={true} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }}/>
+                  onChangeText={(text) => this.password = text} secureTextEntry={true} borderColor={'darkturquoise'} labelStyle={{ color: 'darkturquoise', fontSize : 20 }} inputStyle={{ color: 'darkturquoise' }}/>
                   <View style={{padding: 10, width: 250}}>
                       <Button
                       containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'darkturquoise'}}
-                      style={{fontSize: 20, color: 'white'}} onPress={() => this.onLoginButtonPress()}>
+                      style={{fontSize: 20, color: 'black'}} onPress={() => this.onLoginButtonPress()}>
                         Entrar
                       </Button>
                   </View>
                   <View style={{padding: 10}}>
                       <Button
-                        containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'white'}}
+                        containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'darkturquoise'}}
                         style={{fontSize: 20, color: 'black'}} onPress={onRegisterButtonPress} >
                             Cadastrar-se
                       </Button>
@@ -49,7 +49,7 @@ export default class Login extends Component {
               </View>
          </View>
          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'paleturquoise'}} >
-            <Text  style={styles.textFooter}> © 2016 Produced for the class Projeto de Software I</Text>
+            <Text  style={styles.textFooter}> © 2017 Produced for the class Projeto de Software II</Text>
          </View>
          <DropdownAlert
                  ref={(ref) => this.dropdown = ref}  closeInterval={4000}  showCancel={false} />
@@ -110,6 +110,6 @@ const styles = StyleSheet.create({
   },
   textFooter:{
     fontSize: 12,
-    color: "lightslategrey"
+    color: "black"
   }
 });

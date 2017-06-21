@@ -6,7 +6,7 @@ export default class Footer extends Component {
   render() {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'paleturquoise'}} >
-         <Text  style={styles.textFooter}> © 2016 Produced for the class Projeto de Software I</Text>
+         <Text  style={styles.textFooter}> © 2017 Produced for the class Projeto de Software II</Text>
       </View>
     )
   }

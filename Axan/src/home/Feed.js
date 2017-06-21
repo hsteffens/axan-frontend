@@ -58,7 +58,7 @@ export default class Feed extends Component {
      rowData.isSelect = !rowData.isSelect;
      this.setState({
         modalVisible: true,
-        selectedValue: rowID.id
+        selectedValue: rowID.cod
       });
 
    }
@@ -72,11 +72,7 @@ export default class Feed extends Component {
     }
 
    fetchData() {
-     this.setState({
-        modalVisible: false
-      });
-
-     var URL = GLOBAL.BASE_URL + '/api/user/shopping-list/product/' + this.state.selectedValue + '/quantity/'+this.state.quant;
+    var URL = GLOBAL.BASE_URL + '/api/user/shopping-list/product/' + this.state.selectedValue + '/quantity/1';
 
      fetch(URL,
           { method: 'POST',
@@ -87,10 +83,7 @@ export default class Feed extends Component {
            }
          }).then(function(response) {
             if (response.status == 200) {
-              this.setState({
-                 modalVisible: false,
-                 selectedValue: null
-               });
+              hasError = false;
             }else {
                hasError = true;
             }
@@ -101,8 +94,10 @@ export default class Feed extends Component {
           if (hasError) {
             this.dropdown.alertWithType('error', 'Item não adicionado', 'Ocorreu um erro inesperado')
           }else{
+            this.closeModal();
             this.dropdown.onClose();
           }
+
     }
 
    _setModalVisible = (visible) => { this.setState({modalVisible: visible}); };
@@ -120,7 +115,7 @@ export default class Feed extends Component {
   render() {
     var activeButtonStyle = { backgroundColor: '#ddd' };
     return (
-      <View style={{flex: 1, backgroundColor: 'darkslateblue'}}>
+      <View style={{flex: 1, backgroundColor: '#F5F5F5'}}>
 
           <Modal
                animationType={"slide"} transparent={true} visible={this.state.modalVisible}
@@ -128,9 +123,6 @@ export default class Feed extends Component {
                  <View style={[styles.container]}>
                    <View style={[styles.innerContainer]}>
                      <Text>"Adicionar Produto Selecionado"</Text>
-                     <Hoshi style={styles.input} label={'Quantidade do produto'}
-                     onChangeText={(text) => this.quant = text}
-                     borderColor={'black'} labelStyle={{ color: 'black', fontSize : 20 }} inputStyle={{ color: 'white' }}/>
 
                      <Button onPress={this.fetchData.bind()} style={styles.modalButton}> Confirmar </Button>
                      <Button onPress={this.closeModal.bind()} style={styles.modalButton}> Cancelar </Button>
@@ -154,7 +146,7 @@ export default class Feed extends Component {
                   refreshControl={ <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} /> }
                   renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
                   renderRow={(rowData) =>
-                    <View style={{height:100, padding:10, backgroundColor: 'mediumslateblue'}}>
+                    <View style={{height:100, padding:10, backgroundColor: 'white'}}>
                       <TouchableWithoutFeedback onPress={this._onPressRow.bind(this.rowID, rowData)}>
                         <View style={{flex: 1}}>
                           <View style={{flex: 1, flexDirection: 'row'}}>
@@ -202,8 +194,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     padding: 20,
-    width: 300,
-    height: 300
+    width: 250,
+    height: 200
   },
   modalButton: { marginTop: 10, },
   separator: {

@@ -35,9 +35,9 @@ export default class DatePicker extends Component {
           <View style={{flex: 3}} >
               <Hoshi
                   style={{marginTop: 4,minWidth: 150}}
-                  label={this.props.label} borderColor={'white'}
-                  labelStyle={{ color: 'white', fontSize : 20 }}
-                  inputStyle={{ color: 'white' }}
+                  label={this.props.label} borderColor={'darkturquoise'}
+                  labelStyle={{ color: 'darkturquoise', fontSize : 20 }}
+                  inputStyle={{ color: 'darkturquoise' }}
                   value={this.props.datePicker}
                   onChangeText={(event) => this.setState(date:event.nativeEvent.text)}
               />
@@ -47,7 +47,7 @@ export default class DatePicker extends Component {
               onPress={this.showPicker.bind(this, 'simple', {date: this.state.date})}>
               <View >
                 <Text style={{padding: 20}}>
-                  <Icon name="calendar" color="white" size={25}/>
+                  <Icon name="calendar" color="black" size={25}/>
                 </Text>
               </View>
             </TouchableWithoutFeedback>

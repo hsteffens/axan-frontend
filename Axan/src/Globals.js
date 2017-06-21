@@ -1,4 +1,4 @@
 module.exports = {
-  BASE_URL: 'http://192.168.0.21:8080/rainha_vermelha-services',
+  BASE_URL: 'http://201.54.201.130:3000',
   TOKEN: undefined
 };

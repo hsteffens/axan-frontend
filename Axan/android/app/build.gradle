@@ -132,6 +132,8 @@ dependencies {
     compile "com.android.support:appcompat-v7:25.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile project(':react-native-vector-icons')
+    compile 'com.airbnb.android:react-native-maps:0.13.1'
+    //compile 'com.airbnb.android:react-native-maps:0.6.0'
     //compile project(':react-native-maps')
 
 }

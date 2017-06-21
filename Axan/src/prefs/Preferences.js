@@ -36,7 +36,7 @@ export default class Preferences extends Component {
 
     return (
       <View style={{flex: 1}}>
-      <View style={{flex: 9,justifyContent: 'space-between', backgroundColor: 'slateblue', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{flex: 9,justifyContent: 'space-between', backgroundColor: 'white', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
            <View style={{flex: 4, paddingVertical: 16}}>
                <View style={{flex: 1}}>
                  <Text> Frequência de ida ao supermercado</Text>

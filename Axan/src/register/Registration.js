@@ -28,26 +28,26 @@ export default class Registration extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-         <View style={{flex: 9,justifyContent: 'space-between', backgroundColor: 'slateblue', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+         <View style={{flex: 9,justifyContent: 'space-between', backgroundColor: 'white', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
               <View style={{flex: 4, paddingVertical: 16}}>
                   <View style={{flex: 1}}>
                     <Hoshi style={styles.input} label={'Nome'}
-                    onChangeText={(text) => this.name = text} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }} />
+                    onChangeText={(text) => this.name = text} borderColor={'darkturquoise'} labelStyle={{ color: 'darkturquoise', fontSize : 20 }} inputStyle={{ color: 'darkturquoise' }} />
                   </View>
                   <View style={{flex: 1}}>
                     <DatePicker label={'Data Nascimento'} style={{height: 25}} date={this.state.date}/>
                   </View>
                   <View style={{flex: 1}}>
                     <Hoshi style={styles.input} label={'Telefone'}
-                    onChangeText={(text) => this.cellphone = text} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }} />
+                    onChangeText={(text) => this.cellphone = text} borderColor={'darkturquoise'} labelStyle={{ color: 'darkturquoise', fontSize : 20 }} inputStyle={{ color: 'darkturquoise' }} />
                   </View>
                   <View style={{flex: 1}}>
                     <Hoshi style={styles.input} label={'Email'}
-                    onChangeText={(text) => this.email = text} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }} />
+                    onChangeText={(text) => this.email = text} borderColor={'darkturquoise'} labelStyle={{ color: 'darkturquoise', fontSize : 20 }} inputStyle={{ color: 'darkturquoise' }} />
                   </View>
                   <View style={{flex: 1}}>
                     <Hoshi style={styles.input} label={'Password'}
-                    onChangeText={(text) => this.password = text} secureTextEntry={true} borderColor={'white'} labelStyle={{ color: 'white', fontSize : 20 }} inputStyle={{ color: 'white' }}/>
+                    onChangeText={(text) => this.password = text} secureTextEntry={true} borderColor={'darkturquoise'} labelStyle={{ color: 'darkturquoise', fontSize : 20 }} inputStyle={{ color: 'darkturquoise' }}/>
                   </View>
                   <View style={{flex: 1, padding: 10, width: 250}}>
                       <Button

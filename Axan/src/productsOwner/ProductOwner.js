@@ -58,7 +58,7 @@ export default class ProductOwner extends Component {
    rowData.isSelect = !rowData.isSelect;
    this.setState({
       modalVisible: true,
-      selectedValue: rowID.id
+      selectedValue: rowID.cod
     });
 
  }
@@ -76,10 +76,7 @@ export default class ProductOwner extends Component {
          }
        }).then(function(response) {
           if (response.status == 200) {
-            this.setState({
-               modalVisible: false,
-               selectedValue: null
-             });
+            hasError = false;
           }else {
              hasError = true;
           }
@@ -122,7 +119,9 @@ _setModalVisible = (visible) => { this.setState({modalVisible: visible}); };
         })
         .then((response) =>
               response.json()) .then((responseData) => {
-                 this.setState({ valueShoppingList: responseData.result[0].price});
+                if (responseData.result != undefined) {
+                    this.setState({ valueShoppingList: responseData.result[0].price});
+                }
 
               }) .done();
    }
@@ -130,7 +129,7 @@ _setModalVisible = (visible) => { this.setState({modalVisible: visible}); };
   render() {
     var activeButtonStyle = { backgroundColor: '#ddd' };
     return (
-      <View style={{flex: 1, backgroundColor: 'darkslateblue'}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
 
          <Modal
               animationType={"slide"} transparent={true} visible={this.state.modalVisible}
@@ -158,7 +157,7 @@ _setModalVisible = (visible) => { this.setState({modalVisible: visible}); };
                   refreshControl={ <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} /> }
                   renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
                   renderRow={(rowData) =>
-                    <View style={{height:100, padding:10, backgroundColor: 'mediumslateblue'}}>
+                    <View style={{height:100, padding:10, backgroundColor: 'white'}}>
                       <TouchableWithoutFeedback onPress={this._onPressRow.bind(this.rowID, rowData)}>
                         <View style={{flex: 1}}>
                           <View style={{flex: 1, flexDirection: 'row'}}>
